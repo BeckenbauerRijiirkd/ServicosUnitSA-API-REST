@@ -9,7 +9,7 @@ public class Servico {
 	@Id
 	private String nome;
 	private String descricao;
-	private long valor;
+	private long valorporhora;
 	
 	public Servico() {
 		
@@ -18,7 +18,7 @@ public class Servico {
 	public Servico(String nome, String descricao, long valor) {
 		this.nome = nome;
 		this.descricao = descricao;
-		this.valor = valor;
+		this.valorporhora = valor;
 	}
 	public String getNome() {
 		return nome;
@@ -33,10 +33,10 @@ public class Servico {
 		this.descricao = descricao;
 	}
 	public long getValor() {
-		return valor;
+		return valorporhora;
 	}
 	public void setValor(long valor) {
-		this.valor = valor;
+		this.valorporhora = valor;
 	}
 	
 

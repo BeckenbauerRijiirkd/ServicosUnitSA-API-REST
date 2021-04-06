@@ -11,6 +11,8 @@ import servicos.sa.domain.Cliente;
 import servicos.sa.domain.ClienteRepository;
 import servicos.sa.domain.Funcionario;
 import servicos.sa.domain.FuncionarioRepository;
+import servicos.sa.domain.Servico;
+import servicos.sa.domain.ServicoRepository;
 
 
 
@@ -22,7 +24,7 @@ public class ServicosUnitSaController {
 	FuncionarioRepository servicosRepository;
 	
 	
-	@PostMapping("/cadastrarfuncionario")
+	@PostMapping("/cadastrar/funcionario")
 	public ResponseEntity<Object> cadastrarfuncionario (@RequestBody Funcionario funcionario){
 		
 		
@@ -35,10 +37,21 @@ public class ServicosUnitSaController {
 	@Autowired
 	ClienteRepository clienteRepository;
 	
-	@PostMapping("/cadastrarcliente")
+	@PostMapping("/cadastrar/cliente")
 	public ResponseEntity<Object> cadastrarcliente (@RequestBody Cliente cliente){
 		
 		clienteRepository.save(cliente);
+		
+		return ResponseEntity.badRequest().body(true);
+	}
+	
+	@Autowired
+	ServicoRepository servicoRepository;
+	
+	@PostMapping("/cadastrar/servico")
+	public ResponseEntity<Object> cadastrarservico (@RequestBody Servico servico){
+		
+			servicoRepository.save(servico);
 		
 		return ResponseEntity.badRequest().body(true);
 	}
