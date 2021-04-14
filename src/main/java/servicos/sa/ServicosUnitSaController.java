@@ -95,7 +95,12 @@ public class ServicosUnitSaController {
 
 	@Autowired
 	ServicoExecutadoRepository servicoexecutadoRepository;
+<<<<<<< HEAD
 
+=======
+	
+	
+>>>>>>> 26df80b (Busca_por_servico_e_data)
 	@PostMapping("/cadastrar/servicoexecutado")
 	public ResponseEntity<Object> cadastrarservicoexecutado(@RequestBody ServicoExecutado servicoexecutado) {
 		try {
@@ -109,6 +114,7 @@ public class ServicosUnitSaController {
 		return ResponseEntity.badRequest().body("Serviço Executado do Servico: "+servicoexecutado.getServico()+" Cadastrado");
 	}
 
+<<<<<<< HEAD
 		else {
 			return ResponseEntity.badRequest().body("O Servico executado não foi cadastrado, porque o tipo de servico nao foi cadastrado previamente");
 		}
@@ -154,6 +160,39 @@ public class ServicosUnitSaController {
 
 		return ResponseEntity.badRequest()
 				.body("VALOR TOTAL: " + valor_total + "$" + " HORAS: " + tempoTotal + ", VALOR POR HORA: " + hora);
+=======
+	 @Autowired
+	 BuscaRepository buscarepository;
+	@GetMapping("/pesquisar")
+	public ResponseEntity<Object> pesquisarServico(@RequestBody Busca busca ){
+		
+		List<ServicoExecutado> servico_executado_obtido = servicoexecutadoRepository.findAllByservico(busca.getServico());
+		
+		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
+			//buscarepository.save(servico_executado_obtido.get(i));
+		//}
+		
+		buscarepository.saveAll(servico_executado_obtido);
+		
+		System.out.print(servico_executado_obtido);
+		long tempototal = 0;
+		
+		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
+		//	ServicoExecutado p = servico_executado_obtido.get(i);
+		
+		//	long tempoinicial = p.getHorarioInicio().getTime();
+		//	long tempofinal = p.getHorarioFinal().getTime();
+		//	tempototal = (tempoinicial - tempofinal); 
+		//	tempototal = tempototal / (60 * 60 * 1000) % 24;
+		//}
+	
+		
+		
+		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByservico(busca.getServico());servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
+		
+
+		return ResponseEntity.badRequest().body(result);
+>>>>>>> 26df80b (Busca_por_servico_e_data)
 	}
 
 }
