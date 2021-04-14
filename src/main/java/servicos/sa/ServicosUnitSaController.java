@@ -91,27 +91,25 @@ public class ServicosUnitSaController {
 		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
 			//buscarepository.save(servico_executado_obtido.get(i));
 		//}
-		
-		buscarepository.saveAll(servico_executado_obtido);
-		
-		System.out.print(servico_executado_obtido);
-		long tempototal = 0;
-		
-		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
-		//	ServicoExecutado p = servico_executado_obtido.get(i);
-		
-		//	long tempoinicial = p.getHorarioInicio().getTime();
-		//	long tempofinal = p.getHorarioFinal().getTime();
-		//	tempototal = (tempoinicial - tempofinal); 
-		//	tempototal = tempototal / (60 * 60 * 1000) % 24;
-		//}
-	
-		
+
 		
 		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByservico(busca.getServico());servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
 		
-
-		return ResponseEntity.badRequest().body(result);
+		long tempoaux = 0;
+		long tempototal = 0;
+		
+		for (int i = 0; i < servico_executado_obtido.size(); i++) {
+			ServicoExecutado p = result.get(i);
+		
+			long tempoinicial = p.getHorarioInicio().getTime();
+			long tempofinal = p.getHorarioFinal().getTime();
+			tempoaux = (tempoinicial - tempofinal); 
+			tempoaux = tempoaux / (60 * 60 * 1000) % 24;
+			tempototal = tempototal + tempoaux;
+			
+		}
+		
+		return ResponseEntity.badRequest().body(tempototal);
 	}
 	
 }
