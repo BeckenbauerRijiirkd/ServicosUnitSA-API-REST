@@ -1,4 +1,5 @@
 package servicos.sa;
+
 import java.util.*;
 import java.util.Date;
 import java.util.TimeZone;
@@ -26,91 +27,88 @@ import servicos.sa.repository.FuncionarioRepository;
 import servicos.sa.repository.ServicoExecutadoRepository;
 import servicos.sa.repository.ServicoRepository;
 
-
-
 @RestController
-@RequestMapping(value="/servicos")
+@RequestMapping(value = "/servicos")
 public class ServicosUnitSaController {
 
 	@Autowired
 	FuncionarioRepository servicosRepository;
-	
-	
+
 	@PostMapping("/cadastrar/funcionario")
-	public ResponseEntity<Object> cadastrarfuncionario (@RequestBody Funcionario funcionario){
-		
-		
-		
+	public ResponseEntity<Object> cadastrarfuncionario(@RequestBody Funcionario funcionario) {
+
 		servicosRepository.save(funcionario);
-		
+
 		return ResponseEntity.badRequest().body(true);
 	}
-	
+
 	@Autowired
 	ClienteRepository clienteRepository;
-	
+
 	@PostMapping("/cadastrar/cliente")
-	public ResponseEntity<Object> cadastrarcliente (@RequestBody Cliente cliente){
-		
+	public ResponseEntity<Object> cadastrarcliente(@RequestBody Cliente cliente) {
+
 		clienteRepository.save(cliente);
-		
+
 		return ResponseEntity.badRequest().body(true);
 	}
-	
+
 	@Autowired
 	ServicoRepository servicoRepository;
-	
+
 	@PostMapping("/cadastrar/servico")
-	public ResponseEntity<Object> cadastrarservico (@RequestBody Servico servico){
-		
-			servicoRepository.save(servico);
-		
+	public ResponseEntity<Object> cadastrarservico(@RequestBody Servico servico) {
+
+		servicoRepository.save(servico);
+
 		return ResponseEntity.badRequest().body(true);
 	}
-	
+
 	@Autowired
 	ServicoExecutadoRepository servicoexecutadoRepository;
-	
-	
+
 	@PostMapping("/cadastrar/servicoexecutado")
-	public ResponseEntity<Object> cadastrarservicoexecutado (@RequestBody ServicoExecutado servicoexecutado){
-			 
-			servicoexecutadoRepository.save(servicoexecutado);
-		
+	public ResponseEntity<Object> cadastrarservicoexecutado(@RequestBody ServicoExecutado servicoexecutado) {
+
+		servicoexecutadoRepository.save(servicoexecutado);
+
 		return ResponseEntity.badRequest().body(true);
 	}
-	
 
-	 @Autowired
-	 BuscaRepository buscarepository;
+	@Autowired
+	BuscaRepository buscarepository;
+
 	@GetMapping("/pesquisar")
-	public ResponseEntity<Object> pesquisarServico(@RequestBody Busca busca ){
-		
-		List<ServicoExecutado> servico_executado_obtido = servicoexecutadoRepository.findAllByservico(busca.getServico());
-		
-		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
-			//buscarepository.save(servico_executado_obtido.get(i));
-		//}
+	public ResponseEntity<Object> pesquisarServico(@RequestBody Busca busca) {
 
-		
-		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByservico(busca.getServico());servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
-		
+		List<ServicoExecutado> servico_executado_obtido = servicoexecutadoRepository
+				.findAllByservico(busca.getServico());
+
+		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByservico(busca.getServico());
+		servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
+
 		long tempoaux = 0;
 		long tempototal = 0;
-		
+
 		for (int i = 0; i < servico_executado_obtido.size(); i++) {
 			ServicoExecutado p = result.get(i);
-		
+
 			long tempoinicial = p.getHorarioInicio().getTime();
 			long tempofinal = p.getHorarioFinal().getTime();
-			tempoaux = (tempoinicial - tempofinal); 
+			tempoaux = (tempoinicial - tempofinal);
 			tempoaux = tempoaux / (60 * 60 * 1000) % 24;
 			tempototal = tempototal + tempoaux;
 			
 		}
-		
-		return ResponseEntity.badRequest().body(tempototal);
-	}
-	
-}
 
+		Servico servico_hora = servicoRepository.findBynome(busca.getServico());
+
+		Long hora = servico_hora.getValor();
+
+		Long valor_total = (hora * tempototal);
+
+		return ResponseEntity.badRequest()
+				.body("VALOR TOTAL: " + valor_total + "$" + " HORAS: " + tempototal + ", VALOR POR HORA: " + hora);
+	}
+
+}
