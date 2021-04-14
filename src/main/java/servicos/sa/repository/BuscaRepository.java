@@ -14,7 +14,7 @@ import java.util.List;
 public interface BuscaRepository extends JpaRepository<ServicoExecutado, String> {
 	//List lista = new ArrayList(); ou List lista = new LinkedList();
 	
-		List<ServicoExecutado> findAllByData(Date data);
+		List<ServicoExecutado> findAllByDataBetween(Date datainicio, Date datafim);
 		
 	
 }

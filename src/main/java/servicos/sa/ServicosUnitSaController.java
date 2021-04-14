@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import servicos.sa.domain.Busca;
 import servicos.sa.domain.Cliente;
 import servicos.sa.domain.Funcionario;
 import servicos.sa.domain.Servico;
 import servicos.sa.domain.ServicoExecutado;
+import servicos.sa.repository.BuscaRepository;
 import servicos.sa.repository.ClienteRepository;
 import servicos.sa.repository.FuncionarioRepository;
 import servicos.sa.repository.ServicoExecutadoRepository;
@@ -68,6 +70,7 @@ public class ServicosUnitSaController {
 	
 	@Autowired
 	ServicoExecutadoRepository servicoexecutadoRepository;
+	BuscaRepository buscarepository;
 	
 	@PostMapping("/cadastrar/servicoexecutado")
 	public ResponseEntity<Object> cadastrarservicoexecutado (@RequestBody ServicoExecutado servicoexecutado){
@@ -78,17 +81,21 @@ public class ServicosUnitSaController {
 		return ResponseEntity.badRequest().body(true);
 	}
 	
+
 	 
 	@GetMapping("/pesquisar")
-	public ResponseEntity<Object> pesquisarServico(@RequestBody ServicoExecutado servicoexecutado ){
-		ServicoExecutado servico_executado_obtido = new ServicoExecutado();
-		servico_executado_obtido = servicoexecutado;
+	public ResponseEntity<Object> pesquisarServico(@RequestBody Busca busca ){
 		
-		Date servico_obtido = servico_executado_obtido.getData();
-			
-			System.out.print(servico_obtido);
+		List<ServicoExecutado> servico_executado_obtido = servicoexecutadoRepository.findAllByservico(busca.getServico());
+		
+		System.out.print(servico_executado_obtido);
+		
+		
+		
+		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
+		
 
-		return ResponseEntity.badRequest().body(true);
+		return ResponseEntity.badRequest().body(result);
 	}
 	
 }
