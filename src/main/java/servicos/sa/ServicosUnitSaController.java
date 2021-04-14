@@ -1,5 +1,5 @@
 package servicos.sa;
-
+import java.util.*;
 import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
@@ -75,7 +75,6 @@ public class ServicosUnitSaController {
 	@PostMapping("/cadastrar/servicoexecutado")
 	public ResponseEntity<Object> cadastrarservicoexecutado (@RequestBody ServicoExecutado servicoexecutado){
 			 
-
 			servicoexecutadoRepository.save(servicoexecutado);
 		
 		return ResponseEntity.badRequest().body(true);
@@ -91,11 +90,22 @@ public class ServicosUnitSaController {
 		System.out.print(servico_executado_obtido);
 		
 		
+		ServicoExecutado p = servico_executado_obtido.get(0);
+		
+		long tempoinicial = p.getHorarioInicio().getTime();
+		long tempofinal = p.getHorarioFinal().getTime();
+		Long tempototal = (tempoinicial - tempofinal); 
+		tempototal = tempototal / (60 * 60 * 1000) % 24;
+		
+	
+		
+		System.out.print(tempoinicial);
+		
 		
 		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
 		
 
-		return ResponseEntity.badRequest().body(result);
+		return ResponseEntity.badRequest().body(tempototal);
 	}
 	
 }
