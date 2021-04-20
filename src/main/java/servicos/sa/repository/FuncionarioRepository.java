@@ -8,6 +8,8 @@ import servicos.sa.domain.Funcionario;
 
 @Repository
 public interface FuncionarioRepository extends CrudRepository<Funcionario, String> {
-
+	Funcionario findBynome(String nome);
+	Boolean existsBycpf(int cpf); 
+	
 }
 

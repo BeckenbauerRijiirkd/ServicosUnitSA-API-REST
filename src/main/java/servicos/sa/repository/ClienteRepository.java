@@ -7,5 +7,7 @@ import servicos.sa.domain.Cliente;
 
 @Repository
 public interface ClienteRepository extends CrudRepository<Cliente, String>{
+	Cliente findBynome(String cliente);
+	Boolean existsBycnpj(long cnpj);
 	
 }

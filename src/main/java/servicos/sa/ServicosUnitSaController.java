@@ -32,14 +32,23 @@ import servicos.sa.repository.ServicoRepository;
 public class ServicosUnitSaController {
 
 	@Autowired
-	FuncionarioRepository servicosRepository;
+	FuncionarioRepository funcionarioRepository;
 
 	@PostMapping("/cadastrar/funcionario")
 	public ResponseEntity<Object> cadastrarfuncionario(@RequestBody Funcionario funcionario) {
+		try {
+			if (funcionarioRepository.existsBycpf(funcionario.getCpf()) == true) {
 
-		servicosRepository.save(funcionario);
+				return ResponseEntity.badRequest().body("Cadastro negado. Este funcionario ja esta cadastrado");
+			} else {
+				funcionarioRepository.save(funcionario);
+				return ResponseEntity.badRequest().body("Funcionario: " + funcionario.getNome() + " Cadastrado");
+			}
+		} catch (Exception e) {
 
-		return ResponseEntity.badRequest().body(true);
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(false);
+		}
 	}
 
 	@Autowired
@@ -48,9 +57,19 @@ public class ServicosUnitSaController {
 	@PostMapping("/cadastrar/cliente")
 	public ResponseEntity<Object> cadastrarcliente(@RequestBody Cliente cliente) {
 
-		clienteRepository.save(cliente);
+		try {
+			if (clienteRepository.existsBycnpj(cliente.getCnpj()) == true) {
 
-		return ResponseEntity.badRequest().body(true);
+				return ResponseEntity.badRequest().body("Cadastro negado. Este Cliente ja esta cadastrado");
+			} else {
+				clienteRepository.save(cliente);
+				return ResponseEntity.badRequest().body("Cliente: " + cliente.getNome() + " Cadastrado");
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(false);
+		}
 	}
 
 	@Autowired
@@ -59,9 +78,19 @@ public class ServicosUnitSaController {
 	@PostMapping("/cadastrar/servico")
 	public ResponseEntity<Object> cadastrarservico(@RequestBody Servico servico) {
 
-		servicoRepository.save(servico);
+		try {
+			if (servicoRepository.existsBynome(servico.getNome()) == true) {
 
-		return ResponseEntity.badRequest().body(true);
+				return ResponseEntity.badRequest().body("Cadastro negado. Este Servico ja esta cadastrado");
+			} else {
+				servicoRepository.save(servico);
+				return ResponseEntity.badRequest().body("Servico: " + servico.getNome() + " Cadastrado");
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(false);
+		}
 	}
 
 	@Autowired
@@ -69,11 +98,27 @@ public class ServicosUnitSaController {
 
 	@PostMapping("/cadastrar/servicoexecutado")
 	public ResponseEntity<Object> cadastrarservicoexecutado(@RequestBody ServicoExecutado servicoexecutado) {
-
-		servicoexecutadoRepository.save(servicoexecutado);
-
-		return ResponseEntity.badRequest().body(true);
+		try {
+			Funcionario funcionario = funcionarioRepository.findBynome(servicoexecutado.getFuncionario());
+			Cliente cliente = clienteRepository.findBynome(servicoexecutado.getCliente());
+			
+		if (servicoRepository.existsBynome(servicoexecutado.getServico()) == true && funcionarioRepository.existsBycpf(funcionario.getCpf()) == true) {
+			// && clienteRepository.existsBycnpj(cliente.getCnpj()) == true
+			servicoexecutadoRepository.save(servicoexecutado);
+			
+		return ResponseEntity.badRequest().body("Serviço Executado do Servico: "+servicoexecutado.getServico()+" Cadastrado");
 	}
+
+		else {
+			return ResponseEntity.badRequest().body("O Servico executado não foi cadastrado, porque o tipo de servico nao foi cadastrado previamente");
+		}
+	}catch (Exception e) {
+
+		e.printStackTrace();
+		return ResponseEntity.badRequest().body(false);
+		}
+	}
+		
 
 	@Autowired
 	BuscaRepository buscarepository;
@@ -87,28 +132,28 @@ public class ServicosUnitSaController {
 		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByservico(busca.getServico());
 		servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
 
-		long tempoaux = 0;
-		long tempototal = 0;
+		long tempoAux = 0;
+		long tempoTotal = 0;
 
 		for (int i = 0; i < servico_executado_obtido.size(); i++) {
 			ServicoExecutado p = result.get(i);
 
-			long tempoinicial = p.getHorarioInicio().getTime();
-			long tempofinal = p.getHorarioFinal().getTime();
-			tempoaux = (tempoinicial - tempofinal);
-			tempoaux = tempoaux / (60 * 60 * 1000) % 24;
-			tempototal = tempototal + tempoaux;
-			
+			long tempoInicial = p.getHorarioInicio().getTime();
+			long tempoFinal = p.getHorarioFinal().getTime();
+			tempoAux = (tempoInicial - tempoFinal);
+			tempoAux = tempoAux / (60 * 60 * 1000) % 24;
+			tempoTotal = tempoTotal + tempoAux;
+
 		}
 
 		Servico servico_hora = servicoRepository.findBynome(busca.getServico());
 
 		Long hora = servico_hora.getValor();
 
-		Long valor_total = (hora * tempototal);
+		Long valor_total = (hora * tempoTotal);
 
 		return ResponseEntity.badRequest()
-				.body("VALOR TOTAL: " + valor_total + "$" + " HORAS: " + tempototal + ", VALOR POR HORA: " + hora);
+				.body("VALOR TOTAL: " + valor_total + "$" + " HORAS: " + tempoTotal + ", VALOR POR HORA: " + hora);
 	}
 
 }

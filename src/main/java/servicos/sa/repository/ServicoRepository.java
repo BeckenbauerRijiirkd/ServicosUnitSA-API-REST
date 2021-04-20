@@ -12,4 +12,5 @@ import servicos.sa.domain.ServicoExecutado;
 @Repository
 public interface ServicoRepository extends CrudRepository<Servico, String>{
 	Servico findBynome(String servico);
+	Boolean existsBynome(String nome); 
 }
