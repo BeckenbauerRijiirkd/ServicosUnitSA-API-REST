@@ -96,9 +96,13 @@ public class ServicosUnitSaController {
 	@Autowired
 	ServicoExecutadoRepository servicoexecutadoRepository;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 	
+=======
+	BuscaRepository buscarepository;
+>>>>>>> parent of 26df80b (Busca_por_servico_e_data)
 	
 >>>>>>> 26df80b (Busca_por_servico_e_data)
 	@PostMapping("/cadastrar/servicoexecutado")
@@ -114,6 +118,7 @@ public class ServicosUnitSaController {
 		return ResponseEntity.badRequest().body("Serviço Executado do Servico: "+servicoexecutado.getServico()+" Cadastrado");
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 		else {
 			return ResponseEntity.badRequest().body("O Servico executado não foi cadastrado, porque o tipo de servico nao foi cadastrado previamente");
@@ -163,36 +168,38 @@ public class ServicosUnitSaController {
 =======
 	 @Autowired
 	 BuscaRepository buscarepository;
+=======
+	 
+>>>>>>> parent of 26df80b (Busca_por_servico_e_data)
 	@GetMapping("/pesquisar")
 	public ResponseEntity<Object> pesquisarServico(@RequestBody Busca busca ){
 		
 		List<ServicoExecutado> servico_executado_obtido = servicoexecutadoRepository.findAllByservico(busca.getServico());
 		
-		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
-			//buscarepository.save(servico_executado_obtido.get(i));
-		//}
-		
-		buscarepository.saveAll(servico_executado_obtido);
-		
 		System.out.print(servico_executado_obtido);
-		long tempototal = 0;
 		
-		//for (int i = 0; i < servico_executado_obtido.size(); i++) {
-		//	ServicoExecutado p = servico_executado_obtido.get(i);
 		
-		//	long tempoinicial = p.getHorarioInicio().getTime();
-		//	long tempofinal = p.getHorarioFinal().getTime();
-		//	tempototal = (tempoinicial - tempofinal); 
-		//	tempototal = tempototal / (60 * 60 * 1000) % 24;
-		//}
+		ServicoExecutado p = servico_executado_obtido.get(0);
+		
+		long tempoinicial = p.getHorarioInicio().getTime();
+		long tempofinal = p.getHorarioFinal().getTime();
+		Long tempototal = (tempoinicial - tempofinal); 
+		tempototal = tempototal / (60 * 60 * 1000) % 24;
+		
 	
 		
+		System.out.print(tempoinicial);
 		
-		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByservico(busca.getServico());servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
+		
+		List<ServicoExecutado> result = servicoexecutadoRepository.findAllByDataBetween(busca.getDataInicio(), busca.getDataFim());
 		
 
+<<<<<<< HEAD
 		return ResponseEntity.badRequest().body(result);
 >>>>>>> 26df80b (Busca_por_servico_e_data)
+=======
+		return ResponseEntity.badRequest().body(tempototal);
+>>>>>>> parent of 26df80b (Busca_por_servico_e_data)
 	}
 
 }

@@ -2,14 +2,11 @@ package servicos.sa.domain;
 
 import java.util.Date;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 public class Busca {
-	@Id @GeneratedValue
-	private Long id;
+	
 	
 	private String servico;
 	
