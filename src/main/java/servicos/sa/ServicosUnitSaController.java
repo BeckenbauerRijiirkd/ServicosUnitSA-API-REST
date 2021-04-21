@@ -97,9 +97,13 @@ public class ServicosUnitSaController {
 	ServicoExecutadoRepository servicoexecutadoRepository;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 	
+=======
+	BuscaRepository buscarepository;
+>>>>>>> parent of 26df80b (Busca_por_servico_e_data)
 =======
 	BuscaRepository buscarepository;
 >>>>>>> parent of 26df80b (Busca_por_servico_e_data)
@@ -118,6 +122,7 @@ public class ServicosUnitSaController {
 		return ResponseEntity.badRequest().body("Serviço Executado do Servico: "+servicoexecutado.getServico()+" Cadastrado");
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 		else {
@@ -171,6 +176,9 @@ public class ServicosUnitSaController {
 =======
 	 
 >>>>>>> parent of 26df80b (Busca_por_servico_e_data)
+=======
+	 
+>>>>>>> parent of 26df80b (Busca_por_servico_e_data)
 	@GetMapping("/pesquisar")
 	public ResponseEntity<Object> pesquisarServico(@RequestBody Busca busca ){
 		
@@ -195,8 +203,12 @@ public class ServicosUnitSaController {
 		
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		return ResponseEntity.badRequest().body(result);
 >>>>>>> 26df80b (Busca_por_servico_e_data)
+=======
+		return ResponseEntity.badRequest().body(tempototal);
+>>>>>>> parent of 26df80b (Busca_por_servico_e_data)
 =======
 		return ResponseEntity.badRequest().body(tempototal);
 >>>>>>> parent of 26df80b (Busca_por_servico_e_data)
